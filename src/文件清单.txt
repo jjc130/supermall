@@ -1,0 +1,18 @@
+src
+  assets  css-nomalize重置样式-base相同样式,img 文件
+  common  公共内容js文件，const相同的变量名，utils相同的方法
+  components 公共组件.vue，common相同组件，content业务相关的组件
+  network 网络相关的js文件
+  router 路由 js文件
+  store vuex状态管理相关 js文件
+  views 大组件 .vue
+
+git远程仓库supermull
+
+项目
+  A。项目初始化
+  1.划分目录结构
+  2.引用重置样式nomalize和base.css
+  3.配置 vue-config文件,editorconfig文件
+  B。业务开发
+
