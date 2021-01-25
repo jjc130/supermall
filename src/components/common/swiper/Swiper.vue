@@ -124,7 +124,6 @@ export default {
       if(!this.$refs.swiper){
         return
       }
-      console.log(this.$refs.swiper)
       let swiperEl = this.$refs.swiper;
       let slidesEls = swiperEl.getElementsByClassName('slide');
       // 2.保存个数
