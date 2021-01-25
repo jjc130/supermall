@@ -5,9 +5,10 @@
 </template>
 
 <script>
-// require('')
+import NavBar from 'components/common/navbar/NavBar'
+
 export default {
-  name:'shopping'
+  name:'Cart'
 }
 </script>
 

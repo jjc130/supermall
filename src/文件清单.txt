@@ -15,4 +15,58 @@ git远程仓库supermull
   2.引用重置样式nomalize和base.css
   3.配置 vue-config文件,editorconfig文件
   B。业务开发
-
+  4.引入tabbar模板，项目模块划分    tab-bar组件
+  5.首页开发
+      1.首页home导航栏nav-bar的封装和使用 nav-bar组件
+      2. 请求网络数据 
+        组件创建回调create生命周期函数调用getHomeMultidata，network-homejs返回axios实例对象 promise对象getHomeMultidata，获取的数据赋值给data中
+      3.轮播图的展示    home-swiper组件
+        swiper文件中的组件，获取父网络请求数据props，v-for动态生成，动态绑定数据a,img,key
+      4.推荐信息的展示(四个圆)  RecommendView组件 
+        获取父网络请求数据props，v-for动态生成，动态绑定数据a,img,key
+      5. 本周流行开发  feature-view组件
+      6.列表页开发(流行，新款，精选)      TabControl组件
+        获取titles，v-for动态生成，动态数据绑定，事件监听index==currentIndex，给当前活跃列添加样式
+      7.商品页的开发   goods-list组件 
+        合并两个数组：Array.prototype.push.apply(arr1, arr2);或者arr.push(...arr2)
+        父->子 组件 数据传递  
+        home goods[currentTypr].list-->GoodsList goods(v-for item in goods)-->GoodsListItem goods-item(即goods[item])
+        子->父 组件 数据传递
+        事件监听，获取对应的数据展示页（pop,new,sell）
+        子点击事件中this.$emit('tabClick',index) 父点击事件中index的三种状态对应修改修改currentType 父组件goods[currentTypr].list传递子组件
+      8.better-scroll插件的使用，滑动顺畅     better-scroll插件的使用.html文件
+        安装，.wrapper盒子里只能有.contnet盒子
+      9.将better-scroll插件引用到项目中，对滚动进行重构
+          ref属性获取组件中的dom元素
+      10.backTop组件 返回顶部
+          .native修饰符，监听组件原生点击事件
+          配合ref调用子组件better-scroll中的方法scrollTo(0,0)返回顶部,第三个参数表返回顶部的过渡时间
+      11.上拉加载更多    注：父子通信 事件可以大写@，属性不能大写只能 ：-
+          监听pullingUp事件，子发送事件，父接收事件 调用当前页获取数据getHomeGoods(this.currentTypr), getHomeGoods方法中回调this.$refs.scroll.finishPullUp(),实现多次上拉获取数据，
+          this.$refs.scroll.scroll.refresh()实现获取数据后重新计算高度（解决小bug）
+            其他解决方法：
+              vueX状态管理
+              事件总线Vue.prototype.$bus=new Vue() 发送事件this.$bus.$emit('a',参数) 监听事件this.$bus.$on('a',funtion)
+          获取dom元素必须在mounted()生命周期函数中获取，created()生命周期函数有可能会找不到，因为dom元素还没有挂载到页面中
+      12.解决多次请求重新计算高度，用防抖debounce函数实现/节流throttle函数（*未学习）
+            scroll组件中封装refresh函数，goodslist组件监听图片加载完成@load发送事件this.$bus.$emit('',参数)，home组件事件总线监听事件 this.$bus.$on('',func),该func为common/utils中封装的防抖函数，
+              debounce(func,delay){
+                let timer = null;   //利用闭包，timer不会被销毁
+                return function(...args){
+                  if(timer)clear TimeClear(timer)   //将后面开启的定时器关闭
+                  timer = setTimeout(()=>{
+                    func.allly(this,args)           //注意调用该函数时的this指向
+                  },delay)
+                }
+              }
+      13.TabControl组件 滑动一定长度固定
+          轮播图加载完成发送事件，$emit()
+          home接收事件
+          this.$refs..$el.offsetTop()获取高度
+            补充：轮播图四张所以发送了四次事件，解决：定义变量false，判断变量是否为true发送数据后变量true
+      14.home goodsitmelist组件，点击路由跳转
+      15.获取图片数据到detaile组件轮播图中
+      16.detail组件商品描述展示
+          Object.keys(Object).length !== 0 ,表示对象存在
+          数据整合，导出class Goods
+      卒----卒------卒--------卒-------卒-------卒-------卒-----------卒
