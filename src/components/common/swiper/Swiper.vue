@@ -53,16 +53,14 @@ export default {
       scrolling: false, // 是否正在滚动
     };
   },
-  updated () {
-    // 1.操作DOM, 在前后添加Slide
-    setTimeout(() => {
-      // 2.开启定时器
-      if (!this.playTimer) {
+    mounted: function () {
+      // 1.操作DOM, 在前后添加Slide
+      setTimeout(() => {
         this.handleDom();
+        // 2.开启定时器
         this.startTimer();
-      }
-    }, 3000);
-  },
+      }, 3000)
+    },
   methods: {
     /**
      * 定时器操作
@@ -117,15 +115,18 @@ export default {
         "-webkit-transform"
       ] = `translate3d(${position}px), 0, 0`;
       this.swiperStyle["-ms-transform"] = `translate3d(${position}px), 0, 0`;
-    },
+    }, 
     /**
      * 操作DOM, 在DOM前后添加Slide
      */
     handleDom: function () {
       // 1.获取要操作的元素
+      if(!this.$refs.swiper){
+        return
+      }
+      console.log(this.$refs.swiper)
       let swiperEl = this.$refs.swiper;
-      let slidesEls =
-        this.$refs.swiper["childNodes"] && this.$refs.swiper["childNodes"];
+      let slidesEls = swiperEl.getElementsByClassName('slide');
       // 2.保存个数
       this.slideCount = slidesEls.length;
       // 3.如果大于1个, 那么在前后分别添加一个slide
