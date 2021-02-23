@@ -39,11 +39,11 @@ import Scroll from "components/common/scroll/Scroll";
 import DetailGoodsInfo from "./childCompos/DetailGoodsInfo";
 import DetailParamsInfo from "./childCompos/DetailParamsInfo";
 import DetailCommenInfo from "./childCompos/DetailCommenInfo";
-import DetailBottomBar from './childCompos/DetailBottomBar'
+import DetailBottomBar from "./childCompos/DetailBottomBar";
 import GoodsList from "components/content/goods/GoodsList";
-import BackTop from 'components/content/backTop/BackTop'
-import {debounce} from 'common/utils'
-import {itemMinix} from 'common/mixin'
+import BackTop from "components/content/backTop/BackTop";
+import { debounce } from "common/utils";
+import { itemMinix } from "common/mixin";
 
 export default {
   name: "Detail",
@@ -60,7 +60,7 @@ export default {
     DetailBottomBar,
     BackTop,
   },
-  mixins:[itemMinix],
+  mixins: [itemMinix],
   data() {
     return {
       iid: null,
@@ -118,54 +118,60 @@ export default {
     // 获取图片个数
     imgLoad() {
       this.$refs.scroll.refresh();
-      
+
       // 图片加载完成防抖计算组件的top
-      this.getTopY = debounce(()=>{
-        this.offsetTopY.push(0)
-        this.offsetTopY.push(-this.$refs.params.$el.offsetTop - 44)
-        this.offsetTopY.push(-this.$refs.commen.$el.offsetTop - 44)
-        this.offsetTopY.push(-this.$refs.list.$el.offsetTop - 44)
-      })
-      this.getTopY()
+      this.getTopY = debounce(() => {
+        this.offsetTopY.push(0);
+        this.offsetTopY.push(-this.$refs.params.$el.offsetTop - 44);
+        this.offsetTopY.push(-this.$refs.commen.$el.offsetTop - 44);
+        this.offsetTopY.push(-this.$refs.list.$el.offsetTop - 44);
+      });
+      this.getTopY();
     },
-    titleClick(index){
-      
+    titleClick(index) {
       // nav点击跳转到对应位置
-      this.$refs.scroll.scrollTo(0,this.offsetTopY[index],500)
+      this.$refs.scroll.scrollTo(0, this.offsetTopY[index], 500);
     },
-    scroll(position){
+    scroll(position) {
       // 滚动监听，判断nav的状态改变样式
-      for(let i in this.offsetTopY){
+      for (let i in this.offsetTopY) {
         // i转类型
-        i = Number(i)
+        i = Number(i);
         // 如果nav的index为i时不判断
-        if(this.$refs.nav.currentIndex !== i){
+        if (this.$refs.nav.currentIndex !== i) {
           // top[i] < y < top[i+1] || i=length-1 ,y < top[i]
-          if((position.y <= this.offsetTopY[i] && position.y >= this.offsetTopY[i+1]) || (i === this.offsetTopY.length - 1 && position.y <= this.offsetTopY[i])){
-          this.$refs.nav.currentIndex = i
+          if (
+            (position.y <= this.offsetTopY[i] &&
+              position.y >= this.offsetTopY[i + 1]) ||
+            (i === this.offsetTopY.length - 1 &&
+              position.y <= this.offsetTopY[i])
+          ) {
+            this.$refs.nav.currentIndex = i;
           }
         }
-        
-      };
+      }
       this.isScrollShow = position.y < -1000;
     },
     backClick() {
-      this.$refs.scroll.scrollTo(0, 0,1000);
+      this.$refs.scroll.scrollTo(0, 0, 1000);
     },
-    shopClick(){
-      console.log(this)
+    shopClick() {
       // 将加入购物车的一条商品数据存储到该对象
-      const product={};
+      const product = {};
       product.image = this.topImages[0];
       product.title = this.goods.title;
-      product.price = this.goods.realPrice
+      product.price = this.goods.realPrice;
       product.desc = this.goods.desc;
-      product.iid = this.iid
+      product.iid = this.iid;
       // vuex发送事件
-      this.$store.dispatch('addCart',product)
-    }
+      this.$store.dispatch("addCart", product)
+      .then((res) => {
+        // 注意this指向，--差点吐血
+        this.$toast.methods.show(res,800)
+      })
+    },
   },
-  mounted(){
+  mounted() {
     // const refresh = debounce(this.$refs.scroll.refresh, 500);
     // // 获取数据后重新计算高度 用事件总线来实现
     // // 接收事件
@@ -176,8 +182,8 @@ export default {
     // });
   },
   // 离开组件时取消总线监听
-  destroyed(){
-    this.$bus.$off('itemImgLoad', this.itemMinix)
+  destroyed() {
+    this.$bus.$off("itemImgLoad", this.itemMinix);
   },
 };
 </script>
